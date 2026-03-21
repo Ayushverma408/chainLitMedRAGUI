@@ -1,0 +1,35 @@
+{
+  "light": {
+    "primary": "#7C4D2E",
+    "background": "#F5EDD6",
+    "paper": "#FDFAF2",
+    "default": "#F5EDD6",
+    "text": {
+      "primary": "#2C1A0E",
+      "secondary": "#6B4226",
+      "disabled": "#A08060"
+    },
+    "divider": "#C9B99A",
+    "action": {
+      "hover": "#EDE0C4",
+      "selected": "#E4D3B0",
+      "disabledBackground": "#D9C9A8"
+    }
+  },
+  "dark": {
+    "primary": "#D4A574",
+    "background": "#1C1208",
+    "paper": "#261A0E",
+    "text": {
+      "primary": "#F5EDD6",
+      "secondary": "#C9B99A",
+      "disabled": "#8B7355"
+    },
+    "divider": "#4A3520",
+    "action": {
+      "hover": "#2E1E0F",
+      "selected": "#3A2515"
+    }
+  },
+  "font_family": "Lora, Georgia, 'Times New Roman', serif"
+}

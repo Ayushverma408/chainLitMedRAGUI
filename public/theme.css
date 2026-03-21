@@ -1,0 +1,448 @@
+/* ═══════════════════════════════════════════════════════════
+   ScrubRef — Papyrus / Typewriter Theme
+   Palette:
+     --bg          #F5EDD6  aged parchment (page background)
+     --surface     #FDFAF2  cream white    (cards, input field)
+     --border      #C9B99A  tan            (all borders)
+     --ink         #2C1A0E  dark sepia     (primary text)
+     --ink-mid     #6B4226  medium sepia   (secondary text)
+     --ink-faint   #A08060  faint sepia    (placeholders, meta)
+     --accent      #7C4D2E  warm brown     (buttons, links)
+     --amber       #D4A574  amber          (border highlight)
+     --amber-light #F0E0C0  pale amber     (user bubble, hover)
+     --composer    #EAE0C4  composer strip (slightly deeper than bg)
+   ═══════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Special+Elite&display=swap');
+
+/* ── Tokens ─────────────────────────────────────────────── */
+:root {
+  --bg:           #F5EDD6;
+  --surface:      #FDFAF2;
+  --border:       #C9B99A;
+  --ink:          #2C1A0E;
+  --ink-mid:      #6B4226;
+  --ink-faint:    #A08060;
+  --accent:       #7C4D2E;
+  --accent-hover: #5C3520;
+  --amber:        #D4A574;
+  --amber-light:  #F0E0C0;
+  --composer:     #EAE0C4;
+  --r:            10px;
+}
+
+/* ── Dark mode tokens ───────────────────────────────────── */
+[data-theme="dark"] {
+  --bg:           #1C1208;
+  --surface:      #261A0E;
+  --border:       #4A3520;
+  --ink:          #F0E4C8;
+  --ink-mid:      #C9A87A;
+  --ink-faint:    #8B6B48;
+  --accent:       #D4A574;
+  --accent-hover: #E8C090;
+  --amber:        #8B6B48;
+  --amber-light:  #2E1E0F;
+  --composer:     #211509;
+}
+
+html, body, #root {
+  background-color: var(--bg) !important;
+  color: var(--ink) !important;
+  font-family: 'Lora', Georgia, serif !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Every MUI surface defaults to surface/bg ───────────── */
+.MuiPaper-root {
+  background-color: var(--surface) !important;
+  color: var(--ink) !important;
+  font-family: 'Lora', Georgia, serif !important;
+}
+.MuiBox-root,
+.MuiContainer-root {
+  font-family: 'Lora', Georgia, serif !important;
+}
+
+/* ── Typography baseline ────────────────────────────────── */
+p, li, span, label, a, td, th {
+  font-family: 'Lora', Georgia, serif !important;
+  color: var(--ink) !important;
+}
+h1, h2, h3, h4 {
+  font-family: 'Special Elite', 'Courier New', monospace !important;
+  color: var(--ink) !important;
+  letter-spacing: 0.3px !important;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+header {
+  background-color: var(--surface) !important;
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: 0 1px 3px rgba(44,26,14,0.06) !important;
+}
+header * { color: var(--ink) !important; }
+
+/* ── Sidebar / nav ──────────────────────────────────────── */
+nav, aside, [class*="sidebar"] {
+  background-color: #EDE3C4 !important;
+  border-right: 1px solid var(--border) !important;
+}
+nav *, aside *, [class*="sidebar"] * {
+  color: var(--ink-mid) !important;
+}
+[class*="thread"]:hover,
+[class*="chat-item"]:hover {
+  background-color: var(--amber-light) !important;
+}
+
+/* ── Page / chat area ───────────────────────────────────── */
+main,
+[class*="main"],
+[class*="chat-container"],
+[class*="messages"] {
+  background-color: var(--bg) !important;
+}
+
+/* ── Message cards ──────────────────────────────────────── */
+[class*="message"] .MuiPaper-root,
+[class*="step"] .MuiPaper-root {
+  background-color: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r) !important;
+  box-shadow: 0 1px 4px rgba(44,26,14,0.07) !important;
+}
+/* User messages slightly amber-tinted */
+[class*="user-message"] .MuiPaper-root,
+[class*="human"] .MuiPaper-root {
+  background-color: var(--amber-light) !important;
+  border-color: #C9A87A !important;
+}
+
+/* ── Message prose ──────────────────────────────────────── */
+[class*="message"] p, [class*="step"] p,
+[class*="message"] li, [class*="step"] li {
+  font-size: 15.5px !important;
+  line-height: 1.85 !important;
+}
+[class*="message"] hr, [class*="step"] hr {
+  border: none !important;
+  border-top: 1px dashed var(--border) !important;
+  margin: 12px 0 !important;
+}
+
+/* ── Code ───────────────────────────────────────────────── */
+code {
+  font-family: 'Courier New', monospace !important;
+  background-color: #E8D9B8 !important;
+  color: var(--accent) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 4px !important;
+  padding: 1px 5px !important;
+  font-size: 13px !important;
+}
+pre {
+  background-color: #EDE0C4 !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 6px !important;
+}
+pre code {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* ── Tables ─────────────────────────────────────────────── */
+table { border-collapse: collapse !important; width: 100% !important; }
+th { background-color: #E8D9B8 !important; font-weight: 600 !important; }
+th, td {
+  border: 1px solid var(--border) !important;
+  padding: 7px 12px !important;
+}
+
+/* ══════════════════════════════════════════════════════════
+   ACTION BUTTONS — PDF preview & figures
+   High contrast: dark sepia text on amber-light bg
+   ══════════════════════════════════════════════════════════ */
+[class*="actions"] button,
+[class*="action-button"],
+button[class*="action"] {
+  background-color: var(--amber-light) !important;
+  border: 1.5px solid var(--amber) !important;
+  color: var(--ink) !important;           /* dark sepia — fully readable */
+  border-radius: 7px !important;
+  font-family: 'Lora', serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  box-shadow: none !important;
+  padding: 5px 12px !important;
+  transition: background 0.15s, border-color 0.15s !important;
+}
+[class*="actions"] button:hover,
+button[class*="action"]:hover {
+  background-color: #E4CFA4 !important;
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+}
+
+/* ══════════════════════════════════════════════════════════
+   COMPOSER / INPUT AREA
+   Outer strip: --composer (#EAE0C4)
+   Inner text field: --surface (#FDFAF2) — cream, not white
+   Both match the parchment palette
+   ══════════════════════════════════════════════════════════ */
+footer,
+[class*="footer"],
+[class*="composer"],
+[class*="input-box"],
+form[class*="chat"],
+[class*="chat-input"] {
+  background-color: var(--composer) !important;
+  border-top: 1px solid var(--border) !important;
+  box-shadow: 0 -1px 6px rgba(44,26,14,0.07) !important;
+}
+
+/* Input wrapper + inner textarea = same color as composer strip
+   so they read as one unified element with no inner/outer contrast */
+.MuiOutlinedInput-root {
+  background-color: var(--composer) !important;
+  border-radius: var(--r) !important;
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 15px !important;
+  color: var(--ink) !important;
+}
+textarea,
+.MuiInputBase-input,
+.MuiOutlinedInput-input {
+  background-color: transparent !important;  /* inherits composer from parent */
+  color: var(--ink) !important;
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 15px !important;
+  caret-color: var(--accent) !important;
+}
+textarea::placeholder,
+.MuiInputBase-input::placeholder {
+  color: var(--ink-faint) !important;
+  opacity: 1 !important;
+}
+
+/* Border ring — subtle, matches palette */
+.MuiOutlinedInput-notchedOutline {
+  border-color: var(--border) !important;
+  border-radius: var(--r) !important;
+}
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--amber) !important;
+}
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent) !important;
+  border-width: 1.5px !important;
+}
+
+/* ── Send button ────────────────────────────────────────── */
+#send-button,
+button[id*="send"],
+button[type="submit"],
+[class*="send"] button,
+button[class*="send"],
+footer button[class*="MuiIconButton"],
+[class*="composer"] button[class*="MuiIconButton"]:last-child,
+[class*="input-box"] button[class*="MuiIconButton"]:last-child {
+  background-color: var(--accent) !important;
+  color: var(--surface) !important;
+  border-radius: 50% !important;
+  box-shadow: 0 2px 6px rgba(44,26,14,0.25) !important;
+  transition: background 0.15s !important;
+}
+#send-button svg, #send-button path,
+button[id*="send"] svg, button[id*="send"] path,
+button[type="submit"] svg, button[type="submit"] path {
+  fill: var(--surface) !important;
+  color: var(--surface) !important;
+}
+#send-button:hover,
+button[type="submit"]:hover { background-color: var(--accent-hover) !important; }
+
+/* ── Attach / settings icons in composer ────────────────── */
+footer button:not([type="submit"]),
+[class*="composer"] button:not([type="submit"]),
+[class*="input-box"] button:not([type="submit"]) {
+  color: var(--ink-mid) !important;
+}
+footer button:not([type="submit"]):hover,
+[class*="composer"] button:not([type="submit"]):hover {
+  color: var(--accent) !important;
+  background-color: var(--amber-light) !important;
+}
+
+/* ══════════════════════════════════════════════════════════
+   WELCOME / CHAINLIT.MD SCREEN
+   Keep it paper-white, not parchment brown
+   ══════════════════════════════════════════════════════════ */
+[class*="welcome"],
+[class*="readme"],
+[class*="markdown-content"],
+[class*="WelcomeScreen"],
+[class*="welcome-screen"] {
+  background-color: var(--surface) !important;   /* cream, not parchment */
+  border-radius: var(--r) !important;
+  padding: 32px 40px !important;
+  border: 1px solid var(--border) !important;
+  max-width: 720px !important;
+  margin: 24px auto !important;
+  box-shadow: 0 2px 8px rgba(44,26,14,0.08) !important;
+}
+/* Text inside welcome */
+[class*="welcome"] *,
+[class*="readme"] *,
+[class*="markdown-content"] *,
+[class*="WelcomeScreen"] * {
+  color: var(--ink) !important;
+  font-family: 'Lora', Georgia, serif !important;
+  line-height: 1.85 !important;
+}
+[class*="welcome"] h1,
+[class*="WelcomeScreen"] h1 {
+  font-family: 'Special Elite', 'Courier New', monospace !important;
+  font-size: 22px !important;
+  margin-bottom: 8px !important;
+}
+[class*="welcome"] h2, [class*="welcome"] h3,
+[class*="WelcomeScreen"] h2, [class*="WelcomeScreen"] h3 {
+  font-family: 'Special Elite', 'Courier New', monospace !important;
+  color: var(--ink-mid) !important;
+  font-size: 15px !important;
+  margin-top: 20px !important;
+}
+[class*="welcome"] table th {
+  background-color: #EDE3C4 !important;
+}
+[class*="welcome"] hr {
+  border: none !important;
+  border-top: 1px dashed var(--border) !important;
+}
+
+/* ── MUI dropdowns / menus ──────────────────────────────── */
+.MuiMenu-paper, .MuiPopover-paper, .MuiDialog-paper {
+  background-color: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+}
+.MuiMenuItem-root { color: var(--ink) !important; }
+.MuiMenuItem-root:hover { background-color: var(--amber-light) !important; }
+.MuiSelect-select { background-color: var(--amber-light) !important; color: var(--accent) !important; }
+
+/* ── Dark mode: global text — hardcoded, no variable lookup ── */
+/* Using literal hex so there's zero cascade ambiguity         */
+[data-theme="dark"] p,
+[data-theme="dark"] li,
+[data-theme="dark"] span,
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] a,
+[data-theme="dark"] strong,
+[data-theme="dark"] em,
+[data-theme="dark"] td,
+[data-theme="dark"] th,
+[data-theme="dark"] label,
+[data-theme="dark"] div,
+[data-theme="dark"] * {
+  color: #F0E4C8 !important;
+}
+
+/* ── Dark mode: restore accent-colored elements ─────────── */
+[data-theme="dark"] button[type="submit"],
+[data-theme="dark"] [class*="send"] button {
+  color: #FDFAF2 !important;
+  background-color: #D4A574 !important;
+}
+[data-theme="dark"] [class*="actions"] button,
+[data-theme="dark"] button[class*="action"] {
+  color: #2C1A0E !important;   /* dark text on amber-light bg stays readable */
+  background-color: #2E1E0F !important;
+  border-color: #4A3520 !important;
+}
+[data-theme="dark"] [class*="actions"] button span,
+[data-theme="dark"] button[class*="action"] span {
+  color: #F0E4C8 !important;
+}
+
+/* ── Dark mode: input text — high contrast ───────────────── */
+[data-theme="dark"] textarea,
+[data-theme="dark"] .MuiInputBase-input,
+[data-theme="dark"] .MuiOutlinedInput-input {
+  color: var(--ink) !important;
+  background-color: transparent !important;
+  -webkit-text-fill-color: var(--ink) !important; /* overrides Chrome autofill */
+}
+[data-theme="dark"] textarea::placeholder,
+[data-theme="dark"] .MuiInputBase-input::placeholder {
+  color: var(--ink-faint) !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: var(--ink-faint) !important;
+}
+[data-theme="dark"] .MuiOutlinedInput-root {
+  background-color: var(--composer) !important;
+  color: var(--ink) !important;
+}
+
+/* ── Dark mode: MUI surfaces ─────────────────────────────── */
+[data-theme="dark"] .MuiPaper-root {
+  background-color: var(--surface) !important;
+  color: var(--ink) !important;
+}
+[data-theme="dark"] .MuiMenu-paper,
+[data-theme="dark"] .MuiPopover-paper {
+  background-color: var(--surface) !important;
+  border-color: var(--border) !important;
+}
+[data-theme="dark"] .MuiMenuItem-root { color: var(--ink) !important; }
+[data-theme="dark"] .MuiMenuItem-root:hover { background-color: var(--amber-light) !important; }
+
+/* ── Dark mode: code blocks ──────────────────────────────── */
+[data-theme="dark"] code {
+  background-color: #2E1E0F !important;
+  color: var(--accent) !important;
+  border-color: var(--border) !important;
+}
+[data-theme="dark"] pre {
+  background-color: #2E1E0F !important;
+  border-color: var(--border) !important;
+}
+[data-theme="dark"] pre code {
+  background: transparent !important;
+  color: var(--ink) !important;
+}
+
+/* ── Dark mode: table headers ────────────────────────────── */
+[data-theme="dark"] th {
+  background-color: #2E1E0F !important;
+}
+
+/* ── Disclaimer footer text ─────────────────────────────── */
+[class*="disclaimer"], [class*="watermark"], footer p, footer span {
+  color: var(--ink-faint) !important;
+  font-size: 12px !important;
+}
+
+/* ── Hide dark/light mode toggle entirely ───────────────── */
+#theme-toggle,
+button[aria-label="Dark mode"],
+button[aria-label="Light mode"],
+button[aria-label="Toggle theme"],
+button[aria-label="Toggle color scheme"],
+[class*="color-scheme"] button,
+[class*="theme-toggle"],
+[class*="ThemeToggle"],
+[class*="darkmode"],
+[class*="dark-mode-toggle"] {
+  display: none !important;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #C0A882; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
