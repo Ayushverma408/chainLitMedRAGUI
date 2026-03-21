@@ -1,6 +1,6 @@
-# 🏥 Medical Library — RAG Assistant
+# 🩺 ScrubRef
 
-Not your average AI chatbot. Every answer is **retrieved directly from 4 surgical textbooks** — grounded, cited, and traceable to the exact page. One click away from the original PDF.
+Your surgical reference, powered by RAG. Every answer is **retrieved directly from 4 surgical textbooks** — grounded, cited, and one click away from the original PDF page.
 
 ---
 

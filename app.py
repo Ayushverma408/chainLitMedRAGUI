@@ -135,15 +135,15 @@ async def on_chat_start():
 
     await cl.Message(
         content=(
-            f"## 🏥 Medical Library\n"
+            f"## 🩺 ScrubRef\n"
             f"Searching across: {book_names}\n\n"
             f"**Pipeline:** `{pipeline}` · **Model:** `GPT-4o`\n\n"
             f"Ask anything. Answers are grounded in your textbooks with book name + page citations.\n\n"
             f"⚙️ Use the **settings gear** to switch pipeline mode:\n"
             f"- 🏆 **HyDE** — best quality, ~10s\n"
-            f"- ⚡ **Fast** — no HyDE, ~5s\n"
-            f"- 🔓 **Free** — no RAG, GPT-4o only\n\n"
-            f"💡 After each answer, click any **📄 View page** button to see the exact PDF page."
+            f"- ⚡ **Fast** — only 3-4% less accurate, ~5s\n"
+            f"- 🔓 **Free** — no textbook grounding, use for questions outside the books\n\n"
+            f"💡 After each answer, click any **📄 page button** to see the exact PDF page with your chunk highlighted."
         )
     ).send()
 
