@@ -1,63 +1,82 @@
-# 📚 Book Intelligence — Advanced RAG Assistant
+# 🏥 Medical Library — RAG Assistant
 
-Not your average AI chatbot. Every answer here is **retrieved directly from the book you select** — grounded, cited, and traceable to the exact page.
-
----
-
-## 🔬 How It Actually Works
-
-Most AI tools send your question straight to an LLM and hope for the best. We don't.
-
-Your question goes through a **5-stage retrieval pipeline** before a single word of the answer is written:
-
-| Stage | What's happening |
-|---|---|
-| **1. HyDE** | GPT-4o imagines what a perfect answer from the book would look like, then searches using *that* — not your raw question. This bridges the gap between how you ask and how books are written. |
-| **2. Dense Search** | Your question is converted into a semantic vector and matched against every chunk of the book using cosine similarity. Captures *meaning*, not just keywords. |
-| **3. Sparse Search (BM25)** | Classic keyword matching runs in parallel. Catches exact terms, proper nouns, drug names, procedure names — things semantic search sometimes misses. |
-| **4. Reciprocal Rank Fusion** | Both result lists are merged using a ranking algorithm that rewards chunks appearing highly in *both* lists. Best of both worlds. |
-| **5. Cross-Encoder Reranking** | A dedicated ML model reads each (question, passage) pair together and rescores them for true relevance. Far more accurate than embedding similarity alone. |
-
-Only after all five stages does GPT-4o synthesise the final answer — using **only** what was retrieved. No hallucination. No prior knowledge. Just the book.
+Not your average AI chatbot. Every answer is **retrieved directly from 4 surgical textbooks** — grounded, cited, and traceable to the exact page. One click away from the original PDF.
 
 ---
 
-## 🏥 Built for Medical Accuracy
+## 📚 Books Indexed
 
-This system was purpose-built for **Fischer's Mastery of Surgery (8th Edition)** and similar high-stakes reference material where a wrong answer is not an option.
+Searching all four simultaneously on every question:
 
-Every response:
-- Cites the **exact page number** of every claim
-- Refuses to speculate beyond what the retrieved text says
-- Tells you clearly if the information isn't in the retrieved sections
+- **Fischer's Mastery of Surgery** — 8th Edition (~36k chunks)
+- **Sabiston Textbook of Surgery** — 22nd Edition (~25k chunks)
+- **Shackelford's Surgery of the Alimentary Tract** — 9th Edition (~19k chunks)
+- **Blumgart's Surgery of the Liver, Biliary Tract and Pancreas** (~21k chunks)
 
----
-
-## 🚀 Getting Started
-
-1. **Select your book** from the dropdown at the top
-2. **Ask anything** — specific clinical questions, broad concepts, procedure steps
-3. Watch the pipeline work in real time as your answer is retrieved and generated
-4. Click **📚 Knowledge source** below any answer to inspect the exact passages used
+~101,000 chunks. Every answer draws from whichever book has the best passage for your question.
 
 ---
 
-## ⚡ Pipeline at a Glance
+## ⚙️ Choose Your Mode
+
+Click the **settings gear** in the sidebar to switch modes at any time — even mid-session, without losing your conversation.
+
+### 🏆 HyDE — Best Quality (~8-12s)
+Before searching, GPT-4o writes a short hypothetical passage the textbook *would* contain to answer your question. That hypothetical is then used for retrieval — bridging the gap between how you ask questions and how textbooks are written. **Highest accuracy. Use this by default.**
+
+### ⚡ Fast — Nearly as Good, Less Wait (~4-6s)
+Skips the HyDE step. Your query is embedded directly and retrieval runs immediately. Based on evaluation across surgical questions, Fast mode is only **3-4% less accurate than HyDE** — for most revision questions you won't notice a difference. **Good for quick lookups.**
+
+### 🔓 Free — No Textbook Grounding (~3-5s)
+Bypasses retrieval entirely. GPT-4o answers from its own training knowledge — no page citations, no textbook grounding. **Use this when your question is outside the scope of the books** — general anatomy, broad medical concepts, exam strategy, or anything you just want a quick ungrounded answer on. Not suitable when textbook accuracy matters.
+
+> Modes are interchangeable mid-session. Switch freely — your conversation history is always preserved.
+
+---
+
+## 📄 PDF Page Preview — The Highlight
+
+After every answer, a **📄 button appears for each retrieved chunk**, labelled with book and page number.
+
+**Click any button and:**
+- The exact PDF page renders as an image instantly
+- The **chunk text is highlighted in yellow** on the page — you see exactly where in the page your answer came from
+- Pages for **all other retrieved chunks load in the same gallery** — every source, one click, no back and forth
+- ±1 surrounding pages load for the chunk you clicked, so you have full context
+
+This is the fastest way to get from an AI answer to the original textbook — one click.
+
+---
+
+## 🖼️ Extracted Figures
+
+Diagrams, illustrations, and figures are extracted from the PDFs at index time. After an answer, if any retrieved pages contain figures, a **`🖼️ Show figures (N)`** button appears. Click it to load them — kept hidden by default so the answer stays clean.
+
+---
+
+## 🔬 How the Pipeline Works
 
 ```
 Your Question
      ↓
-  HyDE Generation          ← GPT-4o writes a hypothetical answer
+  [HyDE — optional]       ← GPT-4o writes a hypothetical textbook passage
      ↓
-  Dense + Sparse Search    ← Semantic vectors + BM25 keyword match
+  Embed query + HyDE      ← 2 embedding calls, run in parallel
      ↓
-  RRF Merge                ← Best passages from both lists combined
+  4 books in parallel     ← dense(HyDE) + dense(query) + BM25 per book
      ↓
-  Cross-Encoder Rerank     ← ML model picks the most relevant 6
+  Global RRF merge        ← best passages across all books ranked together
      ↓
-  GPT-4o Generation        ← Answers strictly from retrieved context
+  Cross-Encoder Rerank    ← ML model picks the top 6 most relevant chunks
      ↓
-  Your Answer + Citations
+  GPT-4o Generation       ← answers strictly from retrieved context
+     ↓
+  Answer + Citations + 📄 Page buttons
 ```
 
-**Model:** GPT-4o · **Embeddings:** text-embedding-3-small · **Reranker:** ms-marco-MiniLM-L-6-v2
+Every answer includes a timing breakdown so you can see exactly where the time went:
+```
+🟡 9.2s total  ·  📥 retrieval 4.1s (↳ HyDE 3.2s · embed 0.4s · search 0.3s · rerank 0.2s)  ·  🤖 LLM 5.1s
+```
+
+**Model:** GPT-4o · **HyDE:** GPT-4o-mini · **Embeddings:** text-embedding-3-small · **Reranker:** ms-marco-MiniLM-L-6-v2
