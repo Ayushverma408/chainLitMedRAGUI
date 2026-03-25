@@ -184,7 +184,7 @@ async def on_message(message: cl.Message):
                         if mode == "free":
                             msg.content = "🧠  Asking GPT-4o directly..."
                         elif mode == "hyde":
-                            msg.content = "🔬  Generating hypothetical passage + searching 4 textbooks..."
+                            msg.content = "🧠  Thinking..."
                         else:
                             msg.content = "⚡  Searching 4 textbooks..."
                         await msg.update()
@@ -267,7 +267,7 @@ async def on_message(message: cl.Message):
                         "collection": collection,
                         "page":       page,
                         "source":     source,
-                        "content":    content[:200],
+                        "content":    content[:600],
                     },
                     label=f"📄 {source}, p.{page}",
                 )
@@ -294,47 +294,29 @@ async def on_message(message: cl.Message):
 @cl.action_callback("view_page")
 async def on_view_page(action: cl.Action):
     """
-    Gallery view: fetch pages for ALL retrieved chunks in one message.
-    The clicked chunk shows ±1 pages with yellow highlight on the selected page.
-    All other chunks show their single page unadorned.
-    All fetches run concurrently.
+    Show ±1 pages around the clicked chunk, with yellow highlight on the exact page.
+    Only the clicked chunk is shown — other chunks have their own buttons.
     """
     clicked_col     = action.payload["collection"]
     clicked_page    = action.payload["page"]
     clicked_source  = action.payload.get("source", "")
     clicked_content = action.payload.get("content", "")
 
-    all_chunks = cl.user_session.get("last_chunks", [])
-
-    # Build the ordered fetch list — selected chunk first (with ±1), then rest
-    to_fetch = []   # (collection, page_num, highlight_text, label)
-    seen     = set()
-
-    # Selected chunk: ±1 pages, highlight on the exact page
-    for p in [clicked_page - 1, clicked_page, clicked_page + 1]:
+    # ±1 pages around the selected chunk — numbered so display order is always prev→current→next
+    ordered = [clicked_page - 1, clicked_page, clicked_page + 1]
+    display_num = 1
+    to_fetch = []
+    for p in ordered:
         if p > 0:
-            key = f"{clicked_col}:{p}"
-            seen.add(key)
             if p == clicked_page:
-                label = f"★ {clicked_source}, p.{p}"
+                label = f"{display_num}. ★ {clicked_source}, p.{p}"
                 to_fetch.append((clicked_col, p, clicked_content, label))
             else:
                 arrow = "◀" if p < clicked_page else "▶"
-                label = f"{arrow} {clicked_source}, p.{p}"
+                label = f"{display_num}. {arrow} {clicked_source}, p.{p}"
                 to_fetch.append((clicked_col, p, "", label))
+            display_num += 1
 
-    # All other chunks: single page each, no highlight
-    for chunk in all_chunks:
-        col     = chunk.get("collection", "")
-        page    = chunk.get("page")
-        source  = chunk.get("source", "")
-        key     = f"{col}:{page}"
-        if not col or not isinstance(page, int) or key in seen:
-            continue
-        seen.add(key)
-        to_fetch.append((col, page, "", f"{source}, p.{page}"))
-
-    # Fetch all pages concurrently
     async def fetch_one(col, page_n, highlight, label):
         try:
             params = {"highlight": highlight} if highlight else {}
@@ -346,20 +328,17 @@ async def on_view_page(action: cl.Action):
         return None
 
     async with httpx.AsyncClient(timeout=60) as client:
-        results  = await asyncio.gather(*[fetch_one(*args) for args in to_fetch])
+        results = await asyncio.gather(*[fetch_one(*args) for args in to_fetch])
 
     elements = [r for r in results if r is not None]
 
     if elements:
         await cl.Message(
-            content=(
-                f"**📄 All source pages** · opened from **{clicked_source}, p.{clicked_page}**\n\n"
-                f"★ = selected page (highlighted in yellow)  ·  scroll to browse all sources"
-            ),
+            content=f"**📄 {clicked_source}, p.{clicked_page}** · highlighted in yellow",
             elements=elements,
         ).send()
     else:
-        await cl.Message(content="⚠️ Could not load page previews.").send()
+        await cl.Message(content="⚠️ Could not load page preview.").send()
 
 
 @cl.action_callback("show_figures")
